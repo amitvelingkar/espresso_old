@@ -107,6 +107,7 @@ body {
   height: 30pt;
   width: 110pt;
   padding: 8pt 0pt 0pt 0pt;
+  color:#555;
 }
 
 .link-block:hover {
