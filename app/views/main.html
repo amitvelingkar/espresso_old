@@ -28,8 +28,8 @@
              <div class="btn-group" dropdown is-open="status.isopen" ng-model="categories">
               <button type="button" class="btn category-dropdown" dropdown-toggle>
                 <div>
-                  <div class="category-color" ng-class="'{{ selected.category }}'"></div>
-                  {{ selected.category }} 
+                  <div class="{{selected.category}} category-color"></div>
+                  {{ selected.category }}
                   <span class="caret"></span>
                   </div>
               </button>
