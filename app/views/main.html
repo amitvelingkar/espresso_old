@@ -2,7 +2,7 @@
   <!-- Web Pages List -->
   <div id="links-container" ui-sortable ng-model="pages">
     <div class="input-group link-block" ng-repeat="page in pages">
-      <div class="link-block-fill" ng-class="'{{page.category.title}}'">
+      <div class="link-block-fill" ng-class="'{{page.category}}'">
         <p class="link-button" >
           <a href="{{page.link}}">
             <span class="link-caption">{{page.caption}}</span>
@@ -28,16 +28,16 @@
              <div class="btn-group" dropdown is-open="status.isopen" ng-model="categories">
               <button type="button" class="btn category-dropdown" dropdown-toggle>
                 <div>
-                  <div class="category-color" ng-class="'{{selected.category.title}}'"></div>
-                  {{ selected.category.title }} 
+                  <div class="category-color" ng-class="'{{ selected.category }}'"></div>
+                  {{ selected.category }} 
                   <span class="caret"></span>
                   </div>
               </button>
               <ul class="dropdown-menu" role="menu">
                 <li ng-repeat="choice in categories">
                   <a href ng-click="changeCategory($index)">
-                    <div class="category-color" ng-class="'{{choice.title}}'"></div>
-                    {{choice.title}}
+                    <div class="category-color" ng-class="'{{choice}}'"></div>
+                    {{choice}}
                   </a>
                 </li>
               </ul>

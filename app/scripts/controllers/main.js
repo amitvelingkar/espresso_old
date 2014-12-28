@@ -12,17 +12,7 @@ angular.module('espressoApp')
     var pagesInStore = localStorageService.get('pages');
     var lastIDInStore = localStorageService.get('lastID');
     
-    $scope.categories = [
-      {'color':'rgba(0,255,255,0.3)','title':'News'},
-      {'color':'rgba(255,0,255,0.3)','title':'Bills'},
-      {'color':'rgba(255,255,0,0.3)','title':'India'}
-    ];
-
-    $scope.categoryColor = {
-      'News':'rgba(0,255,255,0.3)',
-      'Bills':'rgba(255,0,255,0.3)',
-      'India':'rgba(255,255,0,0.3)'
-    };
+    $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
 
     $scope.pages = pagesInStore || [];
     $scope.lastID = lastIDInStore || 0;
