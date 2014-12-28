@@ -2,7 +2,7 @@
   <!-- Web Pages List -->
   <div id="links-container" ui-sortable ng-model="pages">
     <div class="input-group link-block" ng-repeat="page in pages">
-      <div class="link-block-fill" ng-class="getCategoryColor({{page.category.title}})">
+      <div class="link-block-fill" ng-class="'{{page.category.title}}'">
         <p class="link-button" >
           <a href="{{page.link}}">
             <span class="link-caption">{{page.caption}}</span>
@@ -26,9 +26,9 @@
             <input type="text" ng-model="link" placeholder="http://nytimes.com" class="form-control">
             <h5>Category:</h5>
              <div class="btn-group" dropdown is-open="status.isopen" ng-model="categories">
-              <button type="button" class="btn" dropdown-toggle>
+              <button type="button" class="btn category-dropdown" dropdown-toggle>
                 <div>
-                  <div class="category-color" style="background:{{selected.category.color}}"></div>
+                  <div class="category-color" ng-class="'{{selected.category.title}}'"></div>
                   {{ selected.category.title }} 
                   <span class="caret"></span>
                   </div>
@@ -36,7 +36,7 @@
               <ul class="dropdown-menu" role="menu">
                 <li ng-repeat="choice in categories">
                   <a href ng-click="changeCategory($index)">
-                    <div class="category-color" style="background:{{choice.color}}"></div>
+                    <div class="category-color" ng-class="'{{choice.title}}'"></div>
                     {{choice.title}}
                   </a>
                 </li>

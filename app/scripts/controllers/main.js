@@ -59,7 +59,7 @@ angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $mod
     });
 
     modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
+      $scope.selected.category = selectedItem;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
     });

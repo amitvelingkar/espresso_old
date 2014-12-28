@@ -122,3 +122,22 @@ body {
   border: solid 1px lightgray;
   margin-right: 10px;
 }
+
+.category-dropdown {
+  background-color: whitesmoke;
+  border: 1px solid #ddd;
+}
+
+/***************************
+***  CATEGORY CLASSES
+****************************/
+.Bills {
+  background-color: #D5FFD5;
+}
+.News {
+  background-color: #FFD5FF;
+}
+.India {
+  background-color: #FFE0D5;
+}
+
