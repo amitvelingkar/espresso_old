@@ -1,5 +1,17 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
+<div class="container">
+  <!-- Web Pages List -->
+  <div id="links-container" ui-sortable ng-model="pages">
+    <div class="input-group link-block" ng-repeat="page in pages">
+      <div class="link-block-fill" ng-class="getCategoryColor({{page.category.title}})">
+        <p class="link-button" >
+          <a href="{{page.link}}">
+            <span class="link-caption">{{page.caption}}</span>
+          </a>
+          <button class="btn btn-link btn-xs" ng-click="removePage($index)" aria-label=" Remove">X</button>
+        </p>
+      </div>
+    </div>
+  </div>
 
   <!-- Add Pages Modal Dialog -->
   <div ng-controller="ModalDemoCtrl">

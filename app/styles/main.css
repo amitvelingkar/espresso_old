@@ -34,7 +34,9 @@ body {
 /* Customize container */
 @media (min-width: 768px) {
   .container {
+    /*
     max-width: 730px;
+    */
   }
 }
 .container-narrow > hr {
@@ -76,4 +78,47 @@ body {
   .jumbotron {
     border-bottom: 0;
   }
+}
+
+
+.link-block{
+  display: block;
+  float: left;
+  margin: 5pt 10pt 5pt 0pt;
+   border: thin dashed #DEDEDE;
+  vertical-align: middle;
+  text-align: center;
+  line-height: normal;
+  cursor: move;
+}
+
+.link-block-fill{
+  display: inline-block;
+  padding: 2pt 2pt 2pt 2pt;
+}
+
+.addLink-button {
+  margin: 5pt 10pt 5pt 0pt;
+}
+
+.link-caption {
+  display: block;
+  float: left;
+  height: 30pt;
+  width: 110pt;
+  padding: 8pt 0pt 0pt 0pt;
+}
+
+.link-block:hover {
+  border: thin #808080 dashed;
+  font-weight: bold;
+}
+
+.category-color {
+  width: 20px;
+  float: left;
+  display: inline-block;
+  height: 20px;
+  border: solid 1px lightgray;
+  margin-right: 10px;
 }
