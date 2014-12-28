@@ -1,3 +1,45 @@
 <div class="jumbotron">
   <h1>'Allo, 'Allo!</h1>
+
+  <!-- Add Pages Modal Dialog -->
+  <div ng-controller="ModalDemoCtrl">
+    <script type="text/ng-template" id="AddPageModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Add Web Page</h3>
+        </div>
+        <div class="modal-body">
+            <h5>Caption:</h5>
+            <input type="text" ng-model="caption" placeholder="NY Times" class="form-control">
+            <h5>URL:</h5>
+            <input type="text" ng-model="link" placeholder="http://nytimes.com" class="form-control">
+            <h5>Category:</h5>
+             <div class="btn-group" dropdown is-open="status.isopen" ng-model="categories">
+              <button type="button" class="btn" dropdown-toggle>
+                <div>
+                  <div class="category-color" style="background:{{selected.category.color}}"></div>
+                  {{ selected.category.title }} 
+                  <span class="caret"></span>
+                  </div>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="choice in categories">
+                  <a href ng-click="changeCategory($index)">
+                    <div class="category-color" style="background:{{choice.color}}"></div>
+                    {{choice.title}}
+                  </a>
+                </li>
+              </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">Add</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <!-- Add Pages Button -->
+    <p>
+      <button class="btn btn-lg btn-primary addLink-button" ng-click="open()" aria-label=" Add Link">+ Add Link</button>
+    </p>
+  </div>
 </div>
