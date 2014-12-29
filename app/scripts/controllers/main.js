@@ -10,20 +10,14 @@
 angular.module('espressoApp')
   .controller('MainCtrl', function ($scope, localStorageService) {
     var pagesInStore = localStorageService.get('pages');
-    var lastIDInStore = localStorageService.get('lastID');
     
     $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
 
     $scope.pages = pagesInStore || [];
-    $scope.lastID = lastIDInStore || 0;
     $scope.prevSelectedCategory = null;
 
     $scope.$watch('pages', function () {
       localStorageService.set('pages', $scope.pages);
-    }, true);
-
-    $scope.$watch('lastID', function () {
-      localStorageService.set('lastID', $scope.lastID);
     }, true);
 
     $scope.removePage = function (index) {
@@ -31,7 +25,14 @@ angular.module('espressoApp')
     };
   });
 
-angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $modal, $log, localStorageService) {
+    var lastIDInStore = localStorageService.get('lastID');
+    $scope.lastID = lastIDInStore || 0;
+
+    $scope.$watch('lastID', function () {
+      localStorageService.set('lastID', $scope.lastID);
+    }, true);
+
     $scope.open = function (size) {
     	var modalInstance = $modal.open({
 	      templateUrl: 'AddPageModal.html',
