@@ -16,6 +16,7 @@ angular.module('espressoApp')
 
     $scope.pages = pagesInStore || [];
     $scope.lastID = lastIDInStore || 0;
+    $scope.prevSelectedCategory = null;
 
     $scope.$watch('pages', function () {
       localStorageService.set('pages', $scope.pages);
@@ -44,12 +45,15 @@ angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $mod
         },
         categories: function(){
           return $scope.categories;
+        },
+        prevSelectedCategory: function() {
+        	return $scope.prevSelectedCategory;
         }
       }
     });
 
     modalInstance.result.then(function (selectedItem) {
-      $scope.selected.category = selectedItem;
+      $scope.prevSelectedCategory = selectedItem;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
     });
@@ -58,12 +62,12 @@ angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $mod
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
-angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, pages, categories) {
+angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, pages, categories, prevSelectedCategory) {
 
   $scope.pages = pages;
   $scope.categories = categories;
   $scope.selected = {
-    category: $scope.categories[0]
+    category: prevSelectedCategory || $scope.categories[0]
   };
 
   $scope.ok = function () {
@@ -72,7 +76,6 @@ angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, 
     $scope.pages.push(newPage);
     $scope.caption = '';
     $scope.link = '';
-    $scope.selected.category = '';
     $modalInstance.close($scope.selected.category);
   };
 
