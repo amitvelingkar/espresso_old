@@ -10,7 +10,7 @@
 angular.module('espressoApp')
   .controller('MainCtrl', function ($scope, localStorageService) {
     var pagesInStore = localStorageService.get('pages');
-    var lastIDInStore = localStorageService.get('lastID');
+    var lastIDInStore = localStorageService.get('lastID'); 
     
     $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
 
