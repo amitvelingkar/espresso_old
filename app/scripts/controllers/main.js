@@ -32,28 +32,30 @@ angular.module('espressoApp')
   });
 
 angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
-
     $scope.open = function (size) {
-
-    var modalInstance = $modal.open({
-      templateUrl: 'AddPageModal.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        pages: function () {
-          return $scope.pages;
-        },
-        categories: function(){
-          return $scope.categories;
-        },
-        prevSelectedCategory: function() {
-        	return $scope.prevSelectedCategory;
-        }
-      }
+    	var modalInstance = $modal.open({
+	      templateUrl: 'AddPageModal.html',
+	      controller: 'ModalInstanceCtrl',
+	      size: size,
+	      resolve: {
+	        pages: function () {
+	          return $scope.pages;
+	        },
+	        categories: function(){
+	          return $scope.categories;
+	        },
+	        lastID: function() {
+	        	return $scope.lastID;
+	        },
+	        prevSelectedCategory: function() {
+	        	return $scope.prevSelectedCategory;
+	        }
+    	}
     });
 
     modalInstance.result.then(function (selectedItem) {
-      $scope.prevSelectedCategory = selectedItem;
+      $scope.lastID = selectedItem.curID;
+      $scope.prevSelectedCategory = selectedItem.category;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
     });
@@ -62,21 +64,22 @@ angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $mod
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
-angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, pages, categories, prevSelectedCategory) {
+angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, pages, categories, prevSelectedCategory, lastID) {
 
   $scope.pages = pages;
   $scope.categories = categories;
   $scope.selected = {
-    category: prevSelectedCategory || $scope.categories[0]
+    category: prevSelectedCategory || $scope.categories[0],
+    curID: lastID
   };
 
   $scope.ok = function () {
-    $scope.lastID++;
-    var newPage = {id:$scope.lastID,'caption':$scope.caption,'link':$scope.link,'category':$scope.selected.category};
+    $scope.selected.curID++;
+    var newPage = {id:$scope.selected.curID,'caption':$scope.caption,'link':$scope.link,'category':$scope.selected.category};
     $scope.pages.push(newPage);
     $scope.caption = '';
     $scope.link = '';
-    $modalInstance.close($scope.selected.category);
+    $modalInstance.close($scope.selected);
   };
 
   $scope.cancel = function () {
@@ -84,8 +87,6 @@ angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, 
   };
 
   $scope.changeCategory = function (index) {
-    $scope.selected = {
-      category: $scope.categories[index]
-    };
+  	$scope.selected.category = $scope.categories[index];
   };
 });
