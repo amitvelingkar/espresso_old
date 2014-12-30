@@ -69,18 +69,50 @@ angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, 
 
   $scope.pages = pages;
   $scope.categories = categories;
+  $scope.alerts = [];
   $scope.selected = {
     category: prevSelectedCategory || $scope.categories[0],
     curID: lastID
   };
 
   $scope.ok = function () {
-    $scope.selected.curID++;
-    var newPage = {id:$scope.selected.curID,'caption':$scope.caption,'link':$scope.link,'category':$scope.selected.category};
-    $scope.pages.push(newPage);
-    $scope.caption = '';
-    $scope.link = '';
-    $modalInstance.close($scope.selected);
+    $scope.alerts.length = 0;
+    var hasError = false;
+    var urlPattern = new RegExp("^(https?:\/\/)?([a-zA-Z0-9]+[.]{1}){2}[a-zA-z0-9]+(\/{1}[a-zA-Z0-9]+)*\/?", "i");
+    var urlPatternStartsWithHttp = new RegExp("^(https?:\/\/)", "i");
+
+    // URL validation
+    if (!$scope.link || $scope.link.trim().length < 1) {
+      $scope.alerts.push({type: 'danger', msg: 'URL field cannot be empty'});
+      hasError = true;
+    } else {
+      // prepend with http:// if missing
+      if (!urlPatternStartsWithHttp.test($scope.link)) {
+        // add http:// to URL
+        $scope.link = 'http://' + $scope.link;
+      }
+
+      // check for URL validity
+      if (!urlPattern.test($scope.link)) {
+        $scope.alerts.push({type: 'danger', msg: 'Invalid URL String'});
+        hasError = true;
+      }
+    }
+
+    // caption validation
+    if (!$scope.caption || $scope.caption.trim().length < 1) {
+      $scope.alerts.push({type: 'danger', msg: 'Caption field cannot be empty'});
+      hasError = true;
+    }
+
+    if (!hasError) {
+      $scope.selected.curID++;
+      var newPage = {id:$scope.selected.curID,'caption':$scope.caption,'link':$scope.link,'category':$scope.selected.category};
+      $scope.pages.push(newPage);
+      $scope.caption = '';
+      $scope.link = '';
+      $modalInstance.close($scope.selected);
+    }
   };
 
   $scope.cancel = function () {
@@ -89,5 +121,9 @@ angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, 
 
   $scope.changeCategory = function (index) {
   	$scope.selected.category = $scope.categories[index];
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
   };
 });
