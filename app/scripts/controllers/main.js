@@ -8,7 +8,7 @@
  * Controller of the espressoApp
  */
 angular.module('espressoApp')
-  .controller('MainCtrl', function ($scope, localStorageService) {
+  .controller('MainCtrl', function ($scope, localStorageService, AWSService, UserService) {
     var pagesInStore = localStorageService.get('pages');
     
     $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
@@ -22,6 +22,13 @@ angular.module('espressoApp')
 
     $scope.removePage = function (index) {
       $scope.pages.splice(index, 1);
+    };
+
+    $scope.signedIn = function(oauth) {
+      UserService.setCurrentUser(oauth)
+      .then(function(user) {
+        $scope.user = user;
+      });
     };
   });
 
@@ -78,8 +85,8 @@ angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, 
   $scope.ok = function () {
     $scope.alerts.length = 0;
     var hasError = false;
-    var urlPattern = new RegExp("^(https?:\/\/)?([a-zA-Z0-9]+[.]{1}){2}[a-zA-z0-9]+(\/{1}[a-zA-Z0-9]+)*\/?", "i");
-    var urlPatternStartsWithHttp = new RegExp("^(https?:\/\/)", "i");
+    var urlPattern = new RegExp('^(https?:\/\/)?([a-zA-Z0-9]+[.]{1}){2}[a-zA-z0-9]+(\/{1}[a-zA-Z0-9]+)*\/?', 'i');
+    var urlPatternStartsWithHttp = new RegExp('^(https?:\/\/)', 'i');
 
     // URL validation
     if (!$scope.link || $scope.link.trim().length < 1) {
