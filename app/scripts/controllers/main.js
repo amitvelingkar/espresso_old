@@ -8,7 +8,7 @@
  * Controller of the espressoApp
  */
 angular.module('espressoApp')
-  .controller('MainCtrl', function ($scope, localStorageService, AWSService, UserService) {
+  .controller('MainCtrl', ['$scope', 'localStorageService', 'AWSService', 'UserService', function ($scope, localStorageService, AWSService, UserService) {
     var pagesInStore = localStorageService.get('pages');
     
     $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
@@ -30,9 +30,8 @@ angular.module('espressoApp')
         $scope.user = user;
       });
     };
-  });
-
-angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $modal, $log, localStorageService) {
+  }])
+  .controller('ModalDemoCtrl', ['$scope', '$modal', '$log', 'localStorageService' , function ($scope, $modal, $log, localStorageService) {
     var lastIDInStore = localStorageService.get('lastID');
     $scope.lastID = lastIDInStore || 0;
 
@@ -68,11 +67,8 @@ angular.module('espressoApp').controller('ModalDemoCtrl', function ($scope, $mod
       $log.info('Modal dismissed at: ' + new Date());
     });
   };
-});
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, pages, categories, prevSelectedCategory, lastID) {
+}])
+.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'pages', 'categories', 'prevSelectedCategory', 'lastID', function ($scope, $modalInstance, pages, categories, prevSelectedCategory, lastID) {
 
   $scope.pages = pages;
   $scope.categories = categories;
@@ -133,4 +129,4 @@ angular.module('espressoApp').controller('ModalInstanceCtrl', function ($scope, 
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
   };
-});
+}]);
