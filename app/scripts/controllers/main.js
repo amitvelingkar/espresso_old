@@ -8,8 +8,7 @@
  * Controller of the espressoApp
  */
 angular.module('espressoApp')
-  .controller('MainCtrl', ['$scope', 'localStorageService', 'AWSService', 'UserService', function ($scope, localStorageService, AWSService, UserService) {
-  
+  .controller('MainCtrl', ['$scope', 'AWSService', 'UserService', function ($scope, AWSService, UserService) {
     $scope.signedIn = function(oauth) {
       UserService.setCurrentUser(oauth)
       .then(function(user) {
