@@ -129,6 +129,19 @@ body {
   border: 1px solid #ddd;
 }
 
+.login-image {
+  background-size: 32px 32px;
+  border-radius: 50%;
+  display: block;
+  margin: -1px;
+  height: 32px;
+  width: 32px;
+}
+
+.login-name {
+  margin-top: 15px;
+}
+
 /***************************
 ***  CATEGORY CLASSES
 ****************************/
