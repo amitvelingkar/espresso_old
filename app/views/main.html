@@ -12,22 +12,27 @@
     <pre>{{ user | json }}</pre>
   </div>
 
-  <!-- Web Pages List -->
-  <div id="links-container" ui-sortable ng-model="pages">
-    <div class="input-group link-block" ng-repeat="page in pages">
-      <div class="link-block-fill" ng-class="'{{page.category}}'">
-        <p class="link-button" >
-          <a href="{{page.link}}">
-            <span class="link-caption">{{page.caption}}</span>
-          </a>
-          <button class="btn btn-link btn-xs" ng-click="removePage($index)" aria-label=" Remove">X</button>
-        </p>
-      </div>
-    </div>
-  </div>
-
   <!-- Add Pages Modal Dialog -->
   <div ng-controller="ModalDemoCtrl">
+      <!-- Web Pages List -->
+    <div id="links-container" ui-sortable ng-model="pages">
+      <div class="input-group link-block" ng-repeat="page in pages">
+        <div class="link-block-fill" ng-class="'{{page.category}}'">
+          <p class="link-button" >
+            <a href="{{page.link}}">
+              <span class="link-caption">{{page.caption}}</span>
+            </a>
+            <button class="btn btn-link btn-xs" ng-click="removePage($index)" aria-label=" Remove">X</button>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Pages Button -->
+    <p>
+      <button class="btn btn-lg btn-primary addLink-button" ng-click="open()" aria-label=" Add Link">+ Add Link</button>
+    </p>
+
     <script type="text/ng-template" id="AddPageModal.html">
         <div class="modal-header">
             <h3 class="modal-title">Add Web Page</h3>
@@ -62,10 +67,5 @@
             <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
         </div>
     </script>
-
-    <!-- Add Pages Button -->
-    <p>
-      <button class="btn btn-lg btn-primary addLink-button" ng-click="open()" aria-label=" Add Link">+ Add Link</button>
-    </p>
   </div>
 </div>

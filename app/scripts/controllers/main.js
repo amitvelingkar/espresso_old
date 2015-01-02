@@ -9,21 +9,7 @@
  */
 angular.module('espressoApp')
   .controller('MainCtrl', ['$scope', 'localStorageService', 'AWSService', 'UserService', function ($scope, localStorageService, AWSService, UserService) {
-    var pagesInStore = localStorageService.get('pages');
-    
-    $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
-
-    $scope.pages = pagesInStore || [];
-    $scope.prevSelectedCategory = null;
-
-    $scope.$watch('pages', function () {
-      localStorageService.set('pages', $scope.pages);
-    }, true);
-
-    $scope.removePage = function (index) {
-      $scope.pages.splice(index, 1);
-    };
-
+  
     $scope.signedIn = function(oauth) {
       UserService.setCurrentUser(oauth)
       .then(function(user) {
@@ -31,13 +17,30 @@ angular.module('espressoApp')
       });
     };
   }])
-  .controller('ModalDemoCtrl', ['$scope', '$modal', '$log', 'localStorageService' , function ($scope, $modal, $log, localStorageService) {
+  .controller('ModalDemoCtrl', ['$scope', '$modal', '$log', 'localStorageService', 'UserService', function ($scope, $modal, $log, localStorageService, UserService) {
+    //var pagesInStore = localStorageService.get('pages');
     var lastIDInStore = localStorageService.get('lastID');
+    
+    $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
+    $scope.prevSelectedCategory = null;
     $scope.lastID = lastIDInStore || 0;
+
+    $scope.removePage = function (index) {
+      $scope.pages.splice(index, 1);
+    };
 
     $scope.$watch('lastID', function () {
       localStorageService.set('lastID', $scope.lastID);
     }, true);
+
+    var getPages = function() {
+      UserService.Pages()
+      .then(function(pages) {
+        $scope.pages = pages;
+      });
+    };
+
+    getPages();
 
     $scope.open = function (size) {
     	var modalInstance = $modal.open({
@@ -45,14 +48,8 @@ angular.module('espressoApp')
 	      controller: 'ModalInstanceCtrl',
 	      size: size,
 	      resolve: {
-	        pages: function () {
-	          return $scope.pages;
-	        },
 	        categories: function(){
 	          return $scope.categories;
-	        },
-	        lastID: function() {
-	        	return $scope.lastID;
 	        },
 	        prevSelectedCategory: function() {
 	        	return $scope.prevSelectedCategory;
@@ -61,21 +58,29 @@ angular.module('espressoApp')
     });
 
     modalInstance.result.then(function (selectedItem) {
-      $scope.lastID = selectedItem.curID;
-      $scope.prevSelectedCategory = selectedItem.category;
+      $scope.lastID++; // update last used ID
+      $scope.prevSelectedCategory = selectedItem.category; // remember lst value
+      
+      // upload new page to service
+      var newPage = {'id':$scope.lastID,'caption':selectedItem.caption,'link':selectedItem.link,'category':selectedItem.category};
+      UserService.uploadPage(newPage)
+      .then(function(page) {
+        // TODO - page sort order and page removal
+        getPages();
+      });
+
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
     });
   };
 }])
-.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'pages', 'categories', 'prevSelectedCategory', 'lastID', function ($scope, $modalInstance, pages, categories, prevSelectedCategory, lastID) {
-
-  $scope.pages = pages;
+.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'categories', 'prevSelectedCategory', function ($scope, $modalInstance, categories, prevSelectedCategory) {
   $scope.categories = categories;
   $scope.alerts = [];
   $scope.selected = {
-    category: prevSelectedCategory || $scope.categories[0],
-    curID: lastID
+    caption: '',
+    link: '',
+    category: prevSelectedCategory || $scope.categories[0]
   };
 
   $scope.ok = function () {
@@ -108,12 +113,10 @@ angular.module('espressoApp')
       hasError = true;
     }
 
+    // NO Errors - Close dialog and pass values to caller
     if (!hasError) {
-      $scope.selected.curID++;
-      var newPage = {id:$scope.selected.curID,'caption':$scope.caption,'link':$scope.link,'category':$scope.selected.category};
-      $scope.pages.push(newPage);
-      $scope.caption = '';
-      $scope.link = '';
+      $scope.selected.caption = $scope.caption;
+      $scope.selected.link = $scope.link;
       $modalInstance.close($scope.selected);
     }
   };

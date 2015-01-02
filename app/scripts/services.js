@@ -6,7 +6,7 @@ angular.module('espressoApp.services', [])
   var service = {
     _user: null,
     UsersTable: 'Users',
-    UserItemsTable: 'UsersPages',
+    UsersPagesTable: 'UsersPages',
     setCurrentUser: function(u) {
       if (u && !u.error) {
         AWSService.setToken(u.id_token);
@@ -64,7 +64,68 @@ angular.module('espressoApp.services', [])
 			});
 		}
 		return d.promise;
-    }
+    },
+    uploadPage: function(page) {
+    var d = $q.defer();
+    service.currentUser().then(function(user) {
+      // Get the dynamo instance for the
+      // UsersPagesTable
+      AWSService.dynamo({
+        params: {TableName: service.UsersPagesTable}
+      })
+      .then(function(table) {
+        // TODO - check if URL alreday exists
+        var itemParams = {
+        Item: {
+          'Page url': {S: page.link},
+          'User email': {S: user.email}, 
+          data: {
+            S: JSON.stringify({
+              link: page.link,
+              caption: page.caption,
+              category: page.category
+            })
+            }
+          }
+        };
+        table.putItem(itemParams, function(err, data) {
+          d.resolve(data);
+        });
+      });
+    });
+  return d.promise;
+  },
+  Pages: function() {
+    var d = $q.defer();
+    service.currentUser().then(function(user) {
+      AWSService.dynamo({
+        params: {TableName: service.UsersPagesTable}
+      }).then(function(table) {
+        table.query({
+          TableName: service.UsersPagesTable,
+          KeyConditions: {
+            "User email": {
+              "ComparisonOperator": "EQ",
+              "AttributeValueList": [
+                {S: user.email}
+              ]
+            }
+          }
+        }, function(err, data) {
+          var pages = [];
+          if (data) {
+            angular.forEach(data.Items, function(item) {
+              pages.push(JSON.parse(item.data.S));
+            });
+            d.resolve(pages);
+          } else {
+            d.reject(err);
+          }
+        })
+      });
+    });
+    return d.promise;
+  }
   };
   return service;
 })
