@@ -95,6 +95,33 @@ angular.module('espressoApp.services', [])
     });
   return d.promise;
   },
+  removePage: function(page) {
+    var d = $q.defer();
+    service.currentUser().then(function(user) {
+      // Get the dynamo instance for the
+      // UsersPagesTable
+      AWSService.dynamo({
+        params: {TableName: service.UsersPagesTable}
+      })
+      .then(function(table) {
+        var itemParams = {
+          TableName: service.UsersPagesTable,
+          Key: {
+            "User email": {
+              S: user.email
+            },
+            "Page url": {
+              S: page.link
+            }
+          }
+        };
+        table.deleteItem(itemParams, function(err, data) {
+          d.resolve(data);
+        });
+      });
+    });
+  return d.promise;
+  },
   Pages: function() {
     var d = $q.defer();
     service.currentUser().then(function(user) {

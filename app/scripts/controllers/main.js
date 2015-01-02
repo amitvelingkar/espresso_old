@@ -24,8 +24,15 @@ angular.module('espressoApp')
     $scope.prevSelectedCategory = null;
     $scope.lastID = lastIDInStore || 0;
 
+    // TODO - create a way to custom sort
+    // most likley this will have to inviolved watch on scope and secondary index in dynamo db
+
     $scope.removePage = function (index) {
-      $scope.pages.splice(index, 1);
+      UserService.removePage($scope.pages[index])
+      .then(function(data) {
+        getPages();
+      });
+
     };
 
     $scope.$watch('lastID', function () {
@@ -64,7 +71,7 @@ angular.module('espressoApp')
       var newPage = {'id':$scope.lastID,'caption':selectedItem.caption,'link':selectedItem.link,'category':selectedItem.category};
       UserService.uploadPage(newPage)
       .then(function(page) {
-        // TODO - page sort order and page removal
+        // TODO - page sort order
         getPages();
       });
 
