@@ -1,11 +1,19 @@
 <div class="container">
   <div class="header">
     <div ng-show="user">
-      <ul class="nav nav-pills pull-right">
-        <li class="login-name" title="{{user.email}}">{{user.name}}</li>
-        <li> <a href="#" title="{{user.name}} {{user.email}}"><img class="login-image" src="{{user.picture}}"/></a></li>
-      </ul>
+      <span class="dropdown pull-right" dropdown on-toggle="toggled(open)">
+        <a href class="dropdown-toggle" dropdown-toggle>
+          <img class="login-image" src="{{user.picture}}"/>
+          <span class="login-name">{{user.name}}</span>
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href ng-click="signOut()">Sign Out</a>
+          </li>
+        </ul>
+      </span>
     </div>
+    <a href><img class="icon-small-image" src="images/espresso.jpg" /></a>
     <h3 class="text-muted">espresso</h3>
   </div>
   
@@ -27,7 +35,7 @@
   <!-- Add Pages Modal Dialog -->
   <div ng-show="user" ng-controller="ModalDemoCtrl">
       <!-- Web Pages List -->
-    <div id="links-container" ui-sortable ng-model="pages">
+    <div id="links-container" ui-sortable="sortableOptions" ng-model="pages">
       <div class="input-group link-block" ng-repeat="page in pages">
         <div class="link-block-fill" ng-class="'{{page.category}}'">
           <p class="link-button" >

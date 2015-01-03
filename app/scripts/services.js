@@ -17,6 +17,10 @@ angular.module('espressoApp.services', [])
         return d.promise;
       }
     },
+    disconnectUser: function() {
+      service._user = null; 
+      gapi.auth.signOut();
+    },
     currentUser: function() {
     	var d = $q.defer();
     	if (service._user) {

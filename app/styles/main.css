@@ -128,20 +128,28 @@ body {
   background-color: whitesmoke;
   border: 1px solid #ddd;
 }
-
 .login-image {
-  background-size: 32px 32px;
-  border-radius: 50%;
-  display: block;
-  margin: -1px;
-  height: 32px;
-  width: 32px;
+background-size: 32px 32px;
+border-radius: 50%;
+margin: -1px;
+height: 32px;
+width: 32px;
+display: inline-block;
+float: right;
 }
-
 .login-name {
-  margin-top: 15px;
+margin-top: 8px;
+display: inline-block;
+float: right;
+margin-right: 10px;
 }
 
+.icon-small-image {
+  width: 32px;
+  float: left;
+  margin-top: 10px;
+  margin-right: 5px;
+}
 /***************************
 ***  CATEGORY CLASSES
 ****************************/
