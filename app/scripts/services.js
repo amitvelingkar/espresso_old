@@ -82,17 +82,57 @@ angular.module('espressoApp.services', [])
         var itemParams = {
         Item: {
           'Page url': {S: page.link},
-          'User email': {S: user.email}, 
-          data: {
+          'User email': {S: user.email},
+          'pageData': {
             S: JSON.stringify({
               link: page.link,
               caption: page.caption,
-              category: page.category
+              category: page.category,
+              rank: page.rank
             })
             }
           }
         };
         table.putItem(itemParams, function(err, data) {
+          d.resolve(data);
+        });
+      });
+    });
+  return d.promise;
+  },
+  updatePage: function(page) {
+    var d = $q.defer();
+    service.currentUser().then(function(user) {
+      // Get the dynamo instance for the
+      // UsersPagesTable
+      AWSService.dynamo({
+        params: {TableName: service.UsersPagesTable}
+      })
+      .then(function(table) {
+        var itemParams = {
+          TableName: service.UsersPagesTable,
+          Key: {
+            "User email": {
+              S: user.email
+            },
+            "Page url": {
+              S: page.link
+            }
+          },
+          "UpdateExpression": "set pageData = :updatedPage",
+          "ExpressionAttributeValues": {
+              ":updatedPage": {
+                "S": JSON.stringify({
+                  link: page.link,
+                  caption: page.caption,
+                  category: page.category,
+                  rank: page.rank
+              })
+            }
+          },
+          "ReturnValues": "NONE"
+        };
+        table.updateItem(itemParams, function(err, data) {
           d.resolve(data);
         });
       });
@@ -146,7 +186,7 @@ angular.module('espressoApp.services', [])
           var pages = [];
           if (data) {
             angular.forEach(data.Items, function(item) {
-              pages.push(JSON.parse(item.data.S));
+              pages.push(JSON.parse(item.pageData.S));
             });
             d.resolve(pages);
           } else {

@@ -28,7 +28,6 @@ angular.module('espressoApp')
     
     $scope.categories = ['News','Bills','India','Technology','Business','Entertainment','Blog','Other','Work'];
     $scope.prevSelectedCategory = null;
-    $scope.lastID = lastIDInStore || 0;
 
     $scope.removePage = function (index) {
       UserService.removePage($scope.pages[index])
@@ -47,13 +46,11 @@ angular.module('espressoApp')
       },
       stop: function(e, ui) {
         // this callback has the changed model
-        var logEntry = "bar";
+        for (var i = 0; i < $scope.pages.length; i++) {
+          $scope.pages[i].rank = i+1;
+        }
       }
     };
-
-    $scope.$watch('lastID', function () {
-      localStorageService.set('lastID', $scope.lastID);
-    }, true);
 
     var getPages = function() {
       UserService.Pages()
@@ -63,6 +60,16 @@ angular.module('espressoApp')
     };
 
     getPages();
+
+    // TODO - REMOVE
+    $scope.update = function () {
+      var updatedPage = {'rank':1000,'caption': 'boo-updated','link':'http://www.boop.com','category':'Bills'};
+      UserService.updatePage(updatedPage)
+      .then(function(page) {
+        getPages();
+      });
+    };
+    
 
     $scope.open = function (size) {
     	var modalInstance = $modal.open({
@@ -80,11 +87,16 @@ angular.module('espressoApp')
     });
 
     modalInstance.result.then(function (selectedItem) {
-      $scope.lastID++; // update last used ID
       $scope.prevSelectedCategory = selectedItem.category; // remember lst value
       
       // upload new page to service
-      var newPage = {'id':$scope.lastID,'caption':selectedItem.caption,'link':selectedItem.link,'category':selectedItem.category};
+      var newRank = $scope.pages.length;
+      if (newRank > 0 && $scope.pages[newRank-1].rank && $scope.pages[newRank-1].rank > newRank) {
+        newRank = $scope.pages[newRank-1].rank + 1;
+      } else {
+        newRank++;
+      }
+      var newPage = {'rank':newRank,'caption':selectedItem.caption,'link':selectedItem.link,'category':selectedItem.category};
       UserService.uploadPage(newPage)
       .then(function(page) {
         getPages();

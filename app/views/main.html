@@ -25,12 +25,6 @@
         after-signin="signedIn(oauth)"></div>
     </div>
   </div>
-  <!--
-  // TODO - for debugging purposes, remove later
-  <div ng-show="user">
-    <pre>{{ user | json }}</pre>
-  </div>
-  -->
 
   <!-- Add Pages Modal Dialog -->
   <div ng-show="user" ng-controller="ModalDemoCtrl">
@@ -51,6 +45,11 @@
     <!-- Add Pages Button -->
     <p>
       <button class="btn btn-lg btn-primary addLink-button" ng-click="open()" aria-label=" Add Link">+ Add Link</button>
+    </p>
+
+    <!-- TEMPORARY - Update Pages Button -->
+    <p>
+      <button class="btn btn-lg btn-primary addLink-button" ng-click="update()" aria-label=" Update Link">Update Link</button>
     </p>
 
     <script type="text/ng-template" id="AddPageModal.html">
